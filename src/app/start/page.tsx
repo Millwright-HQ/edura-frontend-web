@@ -27,7 +27,7 @@ export default async function StartPage({ searchParams }: { searchParams: Promis
   return (
     <AuthLayout
       site="Edura"
-      title="Start your academy"
+      title="Enrol your academy"
       sub="Tell us who you are and choose your web address."
       headline="Open your academy in minutes."
       lead="Your classes, content and invoices, under your own name."

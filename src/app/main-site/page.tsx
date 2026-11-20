@@ -1,4 +1,3 @@
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { ICONS, Icon, SiteLayout } from '@/lib/ui';
 
@@ -13,11 +12,22 @@ const FEATURES: { icon: keyof typeof ICONS; title: string; body: string }[] = [
 
 /** The website at the main address, for people who run academies. */
 export default async function MainSitePage() {
-  const requestHeaders = await headers();
-  const apex = requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host') ?? '';
-  const scheme = requestHeaders.get('x-forwarded-proto') ?? 'http';
+  // The demo is its own site, so its address is configuration (DEMO_URL), never worked out from this one.
+  const demoUrl = process.env.DEMO_URL;
+  const footerLinks = [
+    ...(demoUrl ? [{ href: demoUrl, label: 'Try the demo', external: true }] : []),
+    { href: '/start', label: 'Enrol your academy' },
+    { href: '/login', label: 'Platform login' },
+  ];
   return (
-    <SiteLayout brand="Edura" ctaHref="/start" ctaLabel="Start your academy" footer="Edura · Online academies, simply run">
+    <SiteLayout
+      brand="Edura"
+      signInHref={null}
+      ctaHref="/start"
+      ctaLabel="Enrol your academy"
+      footer="Edura · Online academies, simply run"
+      footerLinks={footerLinks}
+    >
       <section className="landing">
         <div className="landing-text">
           <span className="landing-tag">For tuition centres and academies</span>
@@ -27,11 +37,15 @@ export default async function MainSitePage() {
           </p>
           <div className="actions">
             <Link className="button button-lg" href="/start">
-              Start your academy
+              Enrol your academy
             </Link>
-            <a className="button-quiet button-lg" href={`${scheme}://demo.${apex}`}>
-              See a demo academy
-            </a>
+            {demoUrl ? (
+              <a className="button-quiet button-lg" href={demoUrl}>
+                Try the demo
+              </a>
+            ) : (
+              <span className="landing-note">Live demo opening soon</span>
+            )}
           </div>
         </div>
         <div className="landing-art" aria-hidden="true">
@@ -70,7 +84,7 @@ export default async function MainSitePage() {
           <p>Tell us about your centre and we’ll set up your space.</p>
         </div>
         <Link className="button-accent button-lg" href="/start">
-          Start your academy
+          Enrol your academy
         </Link>
       </section>
     </SiteLayout>

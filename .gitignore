@@ -8,3 +8,8 @@ coverage/
 *.local.txt
 *.log
 .DS_Store
+.vercel/
+
+.vercel
+.env*
+*.tsbuildinfo

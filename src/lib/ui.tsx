@@ -471,7 +471,29 @@ export async function AuthLayout({ site, title, sub, headline, lead, children }:
   );
 }
 
-export async function SiteLayout({ brand, signInHref = '/login', ctaHref, ctaLabel, footer, color, children }: { brand: string; signInHref?: string; ctaHref: string; ctaLabel: string; footer: string; color?: string | undefined; children: ReactNode }) {
+/**
+ * `signInHref={null}` removes the Sign in button from the header, for sites whose login lives in the footer.
+ * `footerLinks` are shown beside the footer text; `external` links leave the site.
+ */
+export async function SiteLayout({
+  brand,
+  signInHref = '/login',
+  ctaHref,
+  ctaLabel,
+  footer,
+  footerLinks = [],
+  color,
+  children,
+}: {
+  brand: string;
+  signInHref?: string | null;
+  ctaHref: string;
+  ctaLabel: string;
+  footer: string;
+  footerLinks?: { href: string; label: string; external?: boolean }[];
+  color?: string | undefined;
+  children: ReactNode;
+}) {
   const theme = await getTheme();
   return (
     <div className="site">
@@ -480,16 +502,35 @@ export async function SiteLayout({ brand, signInHref = '/login', ctaHref, ctaLab
         <Brand name={brand} stroke="var(--primary)" />
         <div className="actions">
           <ThemeToggle initial={theme} />
-          <Link className="button-quiet" href={signInHref}>
-            Sign in
-          </Link>
+          {signInHref ? (
+            <Link className="button-quiet" href={signInHref}>
+              Sign in
+            </Link>
+          ) : null}
           <Link className="button" href={ctaHref}>
             {ctaLabel}
           </Link>
         </div>
       </header>
       <main className="site-main">{children}</main>
-      <footer className="site-footer">{footer}</footer>
+      <footer className="site-footer">
+        <span>{footer}</span>
+        {footerLinks.length > 0 ? (
+          <nav className="site-footer-links" aria-label="Footer">
+            {footerLinks.map((link) =>
+              link.external ? (
+                <a key={link.label} href={link.href}>
+                  {link.label}
+                </a>
+              ) : (
+                <Link key={link.label} href={link.href}>
+                  {link.label}
+                </Link>
+              ),
+            )}
+          </nav>
+        ) : null}
+      </footer>
     </div>
   );
 }
