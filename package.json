@@ -1,0 +1,37 @@
+{
+  "name": "@edura/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build:packages": "pnpm -r --filter \"./packages/*\" run build",
+    "dev": "next dev -H localhost -p 3000",
+    "build": "pnpm build:packages && next build",
+    "start": "next start -H localhost -p 3000",
+    "typecheck": "pnpm build:packages && tsc --noEmit",
+    "test": "pnpm build:packages && vitest run",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@zoom/meetingsdk": "^6.10.0",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5",
+    "@edura/contracts": "workspace:^",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=24"
+  }
+}
